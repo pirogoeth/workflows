@@ -43,6 +43,12 @@ on:
         description: "Build platforms to pass to Docker image build"
         type: string
         default: linux/amd64
+      image-tags:
+        description: |
+          Additional tags to pass to Docker image build. Only applied on mainline builds.
+          Passed to docker/metadata-action for processing along with the normal tags.
+        type: string
+        required: false
     secrets:
       ssh-key:
         description: "The SSH key to use. If provided, will be available in the build context."
@@ -99,6 +105,7 @@ jobs:
         tags: |
           type=raw,value=latest
           type=sha,prefix={{branch}}-,format=short
+          ${{ inputs.image-tags }}
 
     - name: Build image with artifacts
       uses: docker/build-push-action@v3
