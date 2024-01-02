@@ -33,6 +33,16 @@ on:
         description: "Enable the SSH key action, allowing use of the SSH key in the build context"
         type: boolean
         default: false
+      image-build-args:
+        description: "Build arguments to pass to Docker image build"
+        type: string
+        default: |
+          GOOS=linux
+          GOARCH=amd64
+      image-build-platforms:
+        description: "Build platforms to pass to Docker image build"
+        type: string
+        default: linux/amd64
     secrets:
       ssh-key:
         description: "The SSH key to use. If provided, will be available in the build context."
@@ -97,11 +107,8 @@ jobs:
         file: "${{ inputs.dockerfile-path }}"
         push: true
         tags: ${{ steps.meta_pr.outputs.tags || steps.meta_tags.outputs.tags || steps.meta_mainline.outputs.tags }}
-        build-args: |
-          GOOS=linux
-          GOARCH=amd64
-        platforms: |
-          linux/amd64
+        build-args: "${{ inputs.image-build-args }}"
+        platforms: "${{ inputs.image-build-platforms }}"
         cache-from: type=gha
         cache-to: type=gha,mode=max
         ssh: "${{ inputs.enable-ssh-key-action && 'default=/home/runner/.ssh/id_rsa' || null }}"
