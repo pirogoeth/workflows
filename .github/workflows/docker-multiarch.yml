@@ -208,4 +208,4 @@ jobs:
 
     - name: Inspect resulting manifest
       run: |
-        docker buildx imagetools inspect ${{ needs.build-vars.outputs.image-repository }}:${{ steps.meta_pr.outputs.tags || steps.meta_tags.outputs.tags || steps.meta_mainline.outputs.tags }}
+        docker buildx imagetools inspect ${{ steps.meta_pr.outputs.tags || steps.meta_tags.outputs.tags || steps.meta_mainline.outputs.tags }}
