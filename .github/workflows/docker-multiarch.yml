@@ -209,4 +209,4 @@ jobs:
     - name: Inspect resulting manifest
       run: |
         images="${{ steps.meta_pr.outputs.tags || steps.meta_tags.outputs.tags || steps.meta_mainline.outputs.tags }}"
-        xargs docker buildx imagetools inspect <<< "${images}"
+        xargs -n1 docker buildx imagetools inspect <<< "${images}"
