@@ -78,8 +78,8 @@ jobs:
     - uses: actions/checkout@v4
     - id: generate
       run: |
-        echo 'dockerfile-hash="${{ hashFiles(inputs.dockerfile-path) }}' >> $GITHUB_OUTPUT
-        echo 'image-repository="${{ inputs.output-registry }}/${{ inputs.output-repository-path }}"' >> $GITHUB_OUTPUT
+        echo 'dockerfile-hash=${{ hashFiles(inputs.dockerfile-path) }}' >> $GITHUB_OUTPUT
+        echo 'image-repository=${{ inputs.output-registry }}/${{ inputs.output-repository-path }}' >> $GITHUB_OUTPUT
 
   image:
     runs-on: ubuntu-latest
