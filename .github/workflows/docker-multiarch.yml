@@ -42,7 +42,7 @@ on:
       image-build-platforms:
         description: "Build platforms to pass to Docker image build"
         type: string
-        default: linux/amd64
+        default: 'linux/amd64'
       image-tag:
         description: |
           Simple tag name/version to use for the resulting manifest
@@ -54,13 +54,29 @@ on:
         required: false
 
 jobs:
+  platform-matrix:
+    runs-on: ubuntu-latest
+
+    outputs:
+      platforms: "${{ steps.platforms.outputs.platforms }}"
+
+    steps:
+    - name: Define platforms
+      id: platforms
+      run: |
+        platforms=$(xargs -I{} echo '"{}"' <<< "${{ inputs.image-build-platforms }}" | jq -sc)
+        echo "platforms=${platforms}" >> $GITHUB_OUTPUT
+
   image:
     runs-on: ubuntu-latest
+
+    needs:
+    - platform-matrix
 
     strategy:
       fail-fast: false
       matrix:
-        platform: "${{ inputs.image-build-platforms}}"
+        platform: "${{ fromJSON(needs.platform-matrix.outputs.platforms) }}"
 
     steps:
     - uses: actions/checkout@v4
